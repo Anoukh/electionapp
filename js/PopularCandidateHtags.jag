@@ -1,0 +1,27 @@
+<%
+    var log=new Log();
+    var Para = request.getContent();
+    var datap = require('../configDAS4.json');
+    var db = new Database(datap.pmtdb.databaseurl+datap.pmtdb.databasename, datap.pmtdb.username, datap.pmtdb.password);
+   
+try{
+    var result = db.query("SELECT * FROM PopTag");
+//log.info(result);  
+
+  }catch(e){
+log.error(e.message);
+}finally{
+    db.close();
+}
+
+    var htags = [];
+//log.info(result);
+for(var i in result){
+  htags.push('<span>#'+result[i].TRUMP+'</span>');
+  htags.push('<span>#'+result[i].CRUZ+'</span>');
+  htags.push('<span>#'+result[i].CLINTON+'</span>');
+  htags.push('<span>#'+result[i].BERNIE+'</span>');
+}
+    //db.close();
+        print(stringify(htags));
+%>

@@ -1,0 +1,74 @@
+
+    // Document on load.
+    $(function() {
+var userCntWorker = new Worker('js/workerUserCount.js');
+//alert(JSON.stringify(userCntWorker));
+        userCntWorker.onmessage = function(event) {
+
+            var top=event.data;
+          // alert(JSON.stringify(top));
+
+           for(var i=0;i<top.length;i++){
+
+                $(top[i].divID1).html(top[i].rep);
+                $(top[i].divID2).html(top[i].demo);
+               console.log("okiiiiiiiz");
+
+
+            }
+
+             userCntWorker.terminate();
+
+};
+
+
+        var top5Worker = new Worker('js/workerCandidate.js');
+//alert(JSON.stringify(top5Worker));
+        top5Worker.onmessage = function(event) {
+		//alert("Completed top5 iterations");
+//alert(event.data );
+ 
+           //console.log("Completed top5 " + event.data + "iterations");
+            var top=event.data;
+          // alert(JSON.stringify(top));
+
+            for(var i=0;i<top.length;i++){
+                $(top[i].imageID).attr("src", top[i].ImgUrl);
+                $(top[i].nameID).html(top[i].party);
+                $(top[i].countID).html(top[i].retweet);
+		//alert("ok");
+                getPersonDataCloud(top[i].cloudDiv,top[i].party ,top[i].color );
+
+            }
+            var R= (top[0].retweet)+(top[2].retweet);
+            var D= (top[1].retweet)+(top[3].retweet);
+            var R1=Math.floor( (top[0].retweet)/R *100);var R2=Math.floor((top[2].retweet)/R * 100);
+            var D1=Math.floor( (top[1].retweet)/D *100);var D2=Math.floor((top[3].retweet)/D * 100);
+            $(top[0].countID).html(R1+"%");  $(top[2].countID).html(R2+"%");
+            $(top[1].countID).html(D1+"%");  $(top[3].countID).html(D2+"%");
+
+
+
+             top5Worker.terminate();
+        };
+
+ 
+
+         
+         
+         ajaxPopular("Trump");
+         PopularElection("Trump");
+         ajaxPopularLink();
+         ajaxNews();
+	 ajaxLatest();
+         setInterval(ajaxLatest, 10000);
+       ajaxGarphSentiment("js/SentimetGraphServer.jag","11","22","33");
+	drawCommunityGraph("communityGraph");
+
+
+      //  setInterval('ajaxPopular("Trump");', 100000);
+
+       // setInterval('PopularElection("Trump");',100000);
+
+       // setInterval(ajaxPopularLink, 8000);
+});

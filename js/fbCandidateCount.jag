@@ -1,0 +1,27 @@
+<%
+    var log=new Log();
+    var Para = request.getContent();
+    var datap = require('../configDAS4.json');
+    var db = new Database(datap.pmtdb.databaseurl+datap.pmtdb.databasename, datap.pmtdb.username, datap.pmtdb.password);
+   
+    try{
+    var result = db.query("SELECT * FROM fbmenstions");
+    }catch(e){
+	log.error(e.message);
+    }finally{
+        db.close();
+    }
+
+    var data = [];
+   //log.info(result);
+  data.push(Number(result[0].TRUMP));
+  data.push(Number(result[0].CRUZ));
+  data.push(Number(result[0].TRUMP)+Number(result[0].CRUZ));
+
+  data.push(Number(result[0].CLINTON));
+  data.push(Number(result[0].BERNIE));
+  data.push(Number(result[0].BERNIE)+Number(result[0].CLINTON));
+  //log.info(stringify(data));
+
+ print(stringify(data));
+%>
